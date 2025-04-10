@@ -1,0 +1,102 @@
+.user-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.select-container {
+  width: 100%;
+  max-width: 450px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: var(--surface-color);
+  border-radius: 12px;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  text-align: center;
+}
+
+.select-container h1 {
+  margin-bottom: 0.75rem;
+  color: var(--text-primary);
+  font-size: 1.75rem;
+  font-weight: 600;
+}
+
+.select-container p {
+  color: var(--text-secondary);
+  margin-bottom: 2rem;
+  font-size: 1rem;
+}
+
+.user-dropdown {
+  width: 100%;
+  max-width: 320px;
+  margin: 0 auto 1.5rem;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background-color: var(--surface-color);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.user-dropdown:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.user-dropdown option {
+  background-color: var(--surface-color);
+  color: var(--text-primary);
+  padding: 0.5rem;
+}
+
+.start-button {
+  width: 100%;
+  max-width: 320px;
+  margin: 0 auto 1rem;
+  padding: 0.875rem;
+  background-color: var(--primary-color);
+  color: var(--text-white);
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.start-button:hover:not(:disabled) {
+  background-color: var(--primary-hover);
+}
+
+.start-button:disabled {
+  background-color: var(--border-color);
+  color: var(--text-secondary);
+}
+
+.logout-button-bottom {
+  width: 100%;
+  max-width: 320px;
+  margin: 0 auto;
+  padding: 0.875rem;
+  background-color: var(--danger-color);
+  color: var(--text-white);
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+.logout-button-bottom:hover {
+  background-color: var(--danger-hover);
+}
+
+.error-message {
+  max-width: 320px;
+  margin: 1rem auto;
+  background-color: #fef2f2;
+  color: var(--danger-color);
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  font-size: 0.875rem;
+}
