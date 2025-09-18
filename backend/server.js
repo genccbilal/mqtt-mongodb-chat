@@ -1,4 +1,5 @@
-const mqtt = require("mqtt");
+require("dotenv").config();
+const mqttClient = require("./services/mqttClient");
 const express = require("express");
 const cors = require("cors");
 const connectDB = require("./config/db");
@@ -12,7 +13,12 @@ const app = express();
 // CORS ayarları
 app.use(
   cors({
-    origin: ["http://localhost:5173", "http://localhost:5174"], // Frontend'in çalıştığı portlar
+    origin: [
+      "http://localhost:5173",
+      "http://localhost:5174",
+      "http://localhost:3000",
+      "http://localhost:8080",
+    ], // Frontend'in çalıştığı portlar
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
@@ -28,9 +34,7 @@ app.use("/api/messages", messageRoutes);
 // Veritabanı bağlantısını başlat
 connectDB();
 
-// MQTT bağlantısı
-const mqttClient = mqtt.connect("mqtt://localhost:1883");
-
+// MQTT bağlantısı ve topic abonelikleri
 mqttClient.on("connect", () => {
   console.log("✅ MQTT Broker'a bağlandı!");
   mqttClient.subscribe("chat/connect");
@@ -76,19 +80,32 @@ mqttClient.on("message", async (topic, message) => {
     try {
       // Mesajı veritabanına kaydet
       const Message = require("./models/Message");
+      // senderName yoksa kullanıcıdan doldur
+      let senderName = data.senderName;
+      if (!senderName) {
+        const sender = await User.findById(data.userId).select("username");
+        senderName = sender ? sender.username : "";
+      }
+
       const newMessage = new Message({
         senderId: data.userId,
         receiverId: data.partnerId,
         message: data.message,
+        senderName,
       });
       await newMessage.save();
 
-      // Mesajı her iki kullanıcıya da gönder
-      mqttClient.publish(
-        `chat/private/${data.partnerId}`,
-        JSON.stringify(data)
-      );
-      mqttClient.publish(`chat/private/${data.userId}`, JSON.stringify(data));
+      const sortedIds = [String(data.userId), String(data.partnerId)].sort();
+      const privateChannel = `private-chat/${sortedIds[0]}/${sortedIds[1]}`;
+
+      const payload = {
+        senderId: data.userId,
+        receiverId: data.partnerId,
+        message: data.message,
+        senderName,
+      };
+
+      mqttClient.publish(privateChannel, JSON.stringify(payload));
     } catch (error) {
       console.error("Mesaj kaydedilirken hata:", error);
     }

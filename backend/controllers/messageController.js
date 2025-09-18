@@ -1,4 +1,5 @@
 const Message = require("../models/Message");
+const mqttClient = require("../services/mqttClient");
 
 const saveMessage = async (req, res) => {
   try {
@@ -10,6 +11,18 @@ const saveMessage = async (req, res) => {
       message,
     });
     await newMessage.save();
+
+    const sortedIds = [String(senderId), String(receiverId)].sort();
+    const privateChannel = `private-chat/${sortedIds[0]}/${sortedIds[1]}`;
+
+    const payload = {
+      senderId,
+      receiverId,
+      message,
+      senderName,
+    };
+    mqttClient.publish(privateChannel, JSON.stringify(payload));
+
     res.status(201).json(newMessage);
   } catch (error) {
     res.status(500).json({ message: error.message });

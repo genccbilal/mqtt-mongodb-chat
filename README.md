@@ -141,8 +141,11 @@ npm run dev
 4. "Sohbete Başla" butonuna tıkla
 5. Gelen mesajları gör ve yanıtla
 
+```
+
 ## 📧 İletişim
 
 - 📧 E-posta: bilalgnc34@gmail.com
 - 🔗 LinkedIn: [Bilal Genç](https://www.linkedin.com/in/bilalgnc/)
 - 💻 GitHub: [genccbilal](https://github.com/genccbilal/)
+```

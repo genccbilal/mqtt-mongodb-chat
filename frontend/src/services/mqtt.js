@@ -10,7 +10,10 @@ class MQTTService {
   connect() {
     if (this.client) return;
 
-    this.client = mqtt.connect("ws://localhost:9001");
+    this.client = mqtt.connect("ws://localhost:9001", {
+      protocol: 'ws',
+      port: 9001
+    });
 
     this.client.on("connect", () => {
       console.log("MQTT bağlantısı başarılı");
